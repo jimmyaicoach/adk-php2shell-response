@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-labelledby="t d">
+<title id="t">PHP2Shell response: the review loop</title>
+<desc id="d">Each round, the planner writes the plan to state, overwriting the last one. The reviewer calls check_plan, plain code that lists any site the plan misses. If nothing is missing and every row passes, the reviewer calls approve_plan, which code refuses unless check_plan passed, and the report writer saves the plan. Otherwise the reviewer writes feedback and the next round starts. After three rounds without approval, the plan is saved as NEEDS-REVIEW for a person.</desc>
+<style>
+svg{--fg:#18201c;--muted:#5c6964;--line:#9fb0a9;--card:#ffffff;--hl:#e8f4f1;--accent:#0b7a6c;--accent2:#9a5b00;--warn:#fff3e0;--loop:#fdeef0;--loopline:#b23b52;--tool:#eef2ff;--toolline:#4b5bbf}
+@media (prefers-color-scheme: dark){svg{--fg:#e4ece8;--muted:#97a59f;--line:#5d6e68;--card:#18211e;--hl:#16302b;--accent:#4fc4b2;--accent2:#f0a64a;--warn:#2e2414;--loop:#331a20;--loopline:#ef8396;--tool:#1b2140;--toolline:#9aa6f0}}
+text{fill:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px}
+.title{font-size:15px;font-weight:600}
+.muted{fill:var(--muted);font-size:12.5px}
+.box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.loop{fill:var(--loop);stroke:var(--loopline);stroke-width:2}
+.code{fill:var(--tool);stroke:var(--toolline);stroke-width:1.5}
+.sess{fill:var(--warn);stroke:var(--accent2);stroke-width:1.5}
+.ok{fill:var(--hl);stroke:var(--accent);stroke-width:2}
+.lp{stroke:var(--loopline);stroke-width:2;fill:none}
+.go{stroke:var(--accent);stroke-width:2;fill:none}
+.st{stroke:var(--accent2);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+</style>
+<defs>
+<marker id="l" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b23b52"/></marker>
+<marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0b7a6c"/></marker>
+<marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a5b00"/></marker>
+</defs>
+
+<rect class="loop" x="20" y="20" width="420" height="300" rx="12"/>
+<text class="title" x="34" y="44">plan_room: LoopAgent, max_iterations=3</text>
+
+<rect class="box" x="40" y="62" width="170" height="70" rx="8"/>
+<text class="title" x="52" y="84">planner</text>
+<text class="muted" x="52" y="104">reads both reports and</text>
+<text class="muted" x="52" y="120">last round's feedback</text>
+
+<rect class="box" x="250" y="62" width="170" height="70" rx="8"/>
+<text class="title" x="262" y="84">reviewer</text>
+<text class="muted" x="262" y="104">checks the plan</text>
+<text class="muted" x="262" y="120">row by row</text>
+<path class="lp" d="M210 97 H246" marker-end="url(#l)"/>
+
+<rect class="code" x="250" y="156" width="170" height="70" rx="8"/>
+<text class="title" x="262" y="178">check_plan (code)</text>
+<text class="muted" x="262" y="198">lists any site that</text>
+<text class="muted" x="262" y="214">needs action and is missing</text>
+<path class="lp" d="M335 132 V152" marker-end="url(#l)"/>
+
+<text class="title" x="72" y="160">Missing a site, an</text>
+<text class="title" x="72" y="178">owner or a rollback?</text>
+<rect class="box" x="40" y="222" width="170" height="80" rx="8"/>
+<text x="52" y="244" font-size="14">feedback, then</text>
+<text x="52" y="262" font-size="14">the next round</text>
+<text class="muted" x="52" y="282">after round 3, the plan is</text>
+<text class="muted" x="52" y="296">saved as NEEDS-REVIEW</text>
+<path class="lp" d="M250 200 H226 V262 H214" marker-end="url(#l)"/>
+<path class="lp" d="M60 222 V136" marker-end="url(#l)"/>
+
+<text x="262" y="252" font-size="14">complete?</text>
+<path class="go" d="M335 226 V270 H452" marker-end="url(#g)"/>
+<text class="muted" x="342" y="290">yes: approve_plan</text>
+
+<rect class="ok" x="456" y="236" width="164" height="70" rx="8"/>
+<text class="title" x="468" y="258">report_writer</text>
+<text class="muted" x="468" y="278">saves the plan to</text>
+<text class="muted" x="468" y="294">reports/ for approval</text>
+
+<rect class="sess" x="456" y="20" width="164" height="150" rx="10"/>
+<text class="title" x="468" y="42">State</text>
+<text x="468" y="66" font-size="13">plan</text>
+<text class="muted" x="468" y="82">overwritten each round</text>
+<text x="468" y="106" font-size="13">feedback</text>
+<text class="muted" x="468" y="122">the reviewer's notes</text>
+<text class="muted" x="468" y="148">prompts stay the same</text>
+<text class="muted" x="468" y="162">size round after round</text>
+<path class="st" d="M420 80 H452" marker-end="url(#o)"/>
+
+<text class="muted" x="20" y="348">Two exits: approve_plan, which code refuses until check_plan passes, and the cap of three rounds.</text>
+<text class="muted" x="20" y="366">Each new draft resets the check, so only a plan that passed can be approved.</text>
+</svg>

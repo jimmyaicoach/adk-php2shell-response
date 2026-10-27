@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d">
+<title id="t">PHP2Shell response: fan out and gather</title>
+<desc id="d">The affected sites in state feed a ParallelAgent. The exposure analyst and the patch analyst run at the same time, each with its own context, and each saves one report under its own key. The planner then reads both reports from state.</desc>
+<style>
+svg{--fg:#18201c;--muted:#5c6964;--line:#9fb0a9;--card:#ffffff;--hl:#e8f4f1;--accent:#0b7a6c;--accent2:#9a5b00;--warn:#fff3e0;--par:#eaf3fd;--parline:#2f6db5}
+@media (prefers-color-scheme: dark){svg{--fg:#e4ece8;--muted:#97a59f;--line:#5d6e68;--card:#18211e;--hl:#16302b;--accent:#4fc4b2;--accent2:#f0a64a;--warn:#2e2414;--par:#16263a;--parline:#7fb2ee}}
+text{fill:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px}
+.title{font-size:15px;font-weight:600}
+.muted{fill:var(--muted);font-size:12.5px}
+.box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.par{fill:var(--par);stroke:var(--parline);stroke-width:2}
+.sess{fill:var(--warn);stroke:var(--accent2);stroke-width:1.5}
+.fan{stroke:var(--parline);stroke-width:2;fill:none}
+.st{stroke:var(--accent2);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+</style>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6db5"/></marker>
+<marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a5b00"/></marker>
+</defs>
+
+<rect class="sess" x="20" y="130" width="150" height="92" rx="10"/>
+<text class="title" x="32" y="152">State in</text>
+<text x="32" y="176" font-size="13">affected_sites</text>
+<text x="32" y="196" font-size="13">advisory</text>
+<text class="muted" x="32" y="214">from match_versions</text>
+
+<path class="fan" d="M170 176 H196" marker-end="url(#p)"/>
+
+<rect class="par" x="198" y="24" width="250" height="312" rx="12"/>
+<text class="title" x="212" y="48">analysis: ParallelAgent</text>
+<text class="muted" x="212" y="66">both branches start together</text>
+
+<rect class="box" x="214" y="84" width="218" height="104" rx="8"/>
+<text class="title" x="226" y="106">exposure_analyst</text>
+<text class="muted" x="226" y="126">ranks each site: P1 internet-</text>
+<text class="muted" x="226" y="142">facing with customer data,</text>
+<text class="muted" x="226" y="158">P2, P3; names the owner</text>
+<text x="226" y="178" font-size="13">output_key: exposure_report</text>
+
+<rect class="box" x="214" y="210" width="218" height="104" rx="8"/>
+<text class="title" x="226" y="232">patch_analyst</text>
+<text class="muted" x="226" y="252">target version per branch;</text>
+<text class="muted" x="226" y="268">end-of-life sites get an</text>
+<text class="muted" x="226" y="284">upgrade path</text>
+<text x="226" y="304" font-size="13">output_key: patch_report</text>
+
+<path class="fan" d="M198 176 H206 V136 H212" marker-end="url(#p)"/>
+<path class="fan" d="M206 176 V262 H212" marker-end="url(#p)"/>
+
+<rect class="sess" x="472" y="98" width="148" height="92" rx="10"/>
+<text class="title" x="484" y="120">State out</text>
+<text x="484" y="144" font-size="13">exposure_report</text>
+<text x="484" y="164" font-size="13">patch_report</text>
+<text class="muted" x="484" y="182">one key per branch</text>
+<path class="st" d="M432 136 H468" marker-end="url(#o)"/>
+<path class="st" d="M432 262 H452 V160 H468" marker-end="url(#o)"/>
+
+<rect class="box" x="472" y="236" width="148" height="70" rx="8"/>
+<text class="title" x="484" y="258">gather: planner</text>
+<text class="muted" x="484" y="278">reads both reports</text>
+<text class="muted" x="484" y="294">from state</text>
+<path class="fan" d="M546 190 V232" marker-end="url(#p)"/>
+</svg>

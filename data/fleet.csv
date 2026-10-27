@@ -1,0 +1,13 @@
+site,php_version,environment,internet_facing,data_class,owner
+shop-frontend,8.4.20,live,yes,customer-pii,web-team
+shop-checkout,8.4.27,live,yes,payment,payments-team
+blog,8.3.30,live,yes,public,marketing-web
+docs-portal,8.5.12,live,yes,public,docs-team
+partner-api,8.2.29,live,yes,customer-pii,platform-team
+admin-console,8.3.36,live,no,internal,platform-team
+reporting,8.2.35,live,no,internal,data-team
+legacy-forum,7.4.33,live,yes,customer-pii,community-team
+intranet-wiki,8.1.31,live,no,internal,it-team
+staging-shop,8.4.18,staging,no,synthetic,web-team
+build-runner,8.5.10,ci,no,internal,devops-team
+old-campaign-site,5.6.40,live,yes,public,marketing-web

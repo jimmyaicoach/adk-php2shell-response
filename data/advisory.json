@@ -1,0 +1,27 @@
+{
+  "name": "PHP2Shell",
+  "cves": [
+    "CVE-2026-109618",
+    "CVE-2026-109619"
+  ],
+  "summary": "Two flaws in the PHP interpreter that can allow unauthenticated remote code execution: memory corruption during out-of-memory handling (CVE-2026-109618), and a use-after-free involving state kept between requests (CVE-2026-109619).",
+  "severity": "CVSS v4.0 9.2 (critical)",
+  "fix_released": "2026-10-21",
+  "fixed_versions": {
+    "8.5": "8.5.12",
+    "8.4": "8.4.27",
+    "8.3": "8.3.36",
+    "8.2": "8.2.35"
+  },
+  "end_of_life_note": "End-of-life branches get no official release. The PHP security team published minimal source backports for 7.4; any other end-of-life branch needs an upgrade to a supported branch.",
+  "sources": [
+    "https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching",
+    "https://www.tenable.com/blog/php2shell-cve-2026-109618-cve-2026-109619-frequently-asked-questions-about-critical-php-remote",
+    "https://unit42.paloaltonetworks.com/cve-2026-109618-cve-2026-109619/",
+    "https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619",
+    "https://cyber.gc.ca/en/alerts-advisories/al26-026-critical-vulnerabilities-impacting-php-cve-2026-109618-cve-2026-109619",
+    "https://www.wiz.io/blog/php2shell-php-rce"
+  ],
+  "read_on": "2026-10-26",
+  "exploitation": "Exploitation attempts were reported around disclosure (AWS, SecurityWeek); Unit 42 retracted its exploitation claim on 2026-10-25. Treat it as urgent either way."
+}

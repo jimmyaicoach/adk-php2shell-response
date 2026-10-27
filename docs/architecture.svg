@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-labelledby="t d">
+<title id="t">PHP2Shell response team: architecture</title>
+<desc id="d">An intake agent routes questions to an advisory analyst or an asset lookup, or hands a full response to a sequential team: read the advisory, match versions in code, analyse exposure and patches in parallel, draft and review the plan in a loop, and write the report to a fixed folder. All agents share one session state. Read-only tools; a person approves any patch.</desc>
+<style>
+svg{--bg:#f7f8f7;--fg:#18201c;--muted:#5c6964;--line:#9fb0a9;--card:#ffffff;--hl:#e8f4f1;--accent:#0b7a6c;--accent2:#9a5b00;--warn:#fff3e0;--wf:#f3eefb;--wfline:#7a4db8;--loop:#fdeef0;--loopline:#b23b52;--par:#eaf3fd;--parline:#2f6db5;--tool:#eef2ff;--toolline:#4b5bbf}
+@media (prefers-color-scheme: dark){svg{--bg:#111816;--fg:#e4ece8;--muted:#97a59f;--line:#5d6e68;--card:#18211e;--hl:#16302b;--accent:#4fc4b2;--accent2:#f0a64a;--warn:#2e2414;--wf:#251d33;--wfline:#b495ec;--loop:#331a20;--loopline:#ef8396;--par:#16263a;--parline:#7fb2ee;--tool:#1b2140;--toolline:#9aa6f0}}
+text{fill:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px}
+.title{font-size:15px;font-weight:600}
+.muted{fill:var(--muted);font-size:12.5px}
+.box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.root{fill:var(--hl);stroke:var(--accent);stroke-width:2}
+.wf{fill:var(--wf);stroke:var(--wfline);stroke-width:2}
+.loop{fill:var(--loop);stroke:var(--loopline);stroke-width:2}
+.par{fill:var(--par);stroke:var(--parline);stroke-width:2}
+.sess{fill:var(--warn);stroke:var(--accent2);stroke-width:1.5}
+.guard{fill:var(--hl);stroke:var(--accent);stroke-width:1.5;stroke-dasharray:5 4}
+.edge{stroke:var(--accent);stroke-width:2;fill:none}
+.seq{stroke:var(--wfline);stroke-width:2.5;fill:none}
+.lp{stroke:var(--loopline);stroke-width:2;fill:none}
+.state{stroke:var(--accent2);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+</style>
+<defs>
+<marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0b7a6c"/></marker>
+<marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7a4db8"/></marker>
+<marker id="l" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b23b52"/></marker>
+</defs>
+
+<!-- the person -->
+<rect class="box" x="20" y="16" width="200" height="44" rx="8"/>
+<text class="title" x="34" y="36">You</text>
+<text class="muted" x="34" y="52">on-call security engineer</text>
+<path class="edge" d="M220 38 H246 V96 H258" marker-end="url(#a)"/>
+
+<!-- root router -->
+<rect class="root" x="260" y="76" width="220" height="58" rx="10"/>
+<text class="title" x="274" y="98">intake (root agent)</text>
+<text class="muted" x="274" y="116">routes each request by its</text>
+<text class="muted" x="274" y="130">description to a sub-agent</text>
+
+<!-- session state -->
+<rect class="sess" x="492" y="16" width="140" height="196" rx="10"/>
+<text class="title" x="504" y="38">Session state</text>
+<text class="muted" x="504" y="60">shared by all agents</text>
+<text x="504" y="84" font-size="13">advisory</text>
+<text x="504" y="104" font-size="13">affected_sites</text>
+<text x="504" y="124" font-size="13">exposure_report</text>
+<text x="504" y="144" font-size="13">patch_report</text>
+<text x="504" y="164" font-size="13">plan, feedback</text>
+<text class="muted" x="504" y="186">each change is an</text>
+<text class="muted" x="504" y="200">event with its delta</text>
+<path class="state" d="M480 105 H490"/>
+
+<!-- sub-agents for quick questions -->
+<path class="edge" d="M300 134 V156 H116 V170" marker-end="url(#a)"/>
+<path class="edge" d="M370 134 V170" marker-end="url(#a)"/>
+<rect class="box" x="20" y="172" width="196" height="50" rx="8"/>
+<text class="title" x="34" y="193">advisory_analyst</text>
+<text class="muted" x="34" y="211">"what is this CVE?"</text>
+<rect class="box" x="272" y="172" width="196" height="50" rx="8"/>
+<text class="title" x="286" y="193">asset_lookup</text>
+<text class="muted" x="286" y="211">"is site X affected?"</text>
+<path class="edge" d="M440 134 V150 H486 V246" marker-end="url(#a)"/>
+<text class="muted" x="380" y="162">full response</text>
+
+<!-- the sequential team -->
+<rect class="wf" x="20" y="248" width="604" height="320" rx="12"/>
+<text class="title" x="36" y="272">response_team: SequentialAgent</text>
+<text class="muted" x="300" y="272">order fixed in code, one step after another</text>
+
+<rect class="box" x="36" y="288" width="168" height="62" rx="8"/>
+<text class="title" x="48" y="310">1 advisory_reader</text>
+<text class="muted" x="48" y="328">tool: read_advisory</text>
+<text class="muted" x="48" y="343">public facts, with sources</text>
+
+<rect class="box" x="226" y="288" width="168" height="62" rx="8"/>
+<text class="title" x="238" y="310">2 exposure_matcher</text>
+<text class="muted" x="238" y="328">tool: match_versions</text>
+<text class="muted" x="238" y="343">code decides "affected"</text>
+
+<rect class="par" x="414" y="288" width="196" height="132" rx="10"/>
+<text class="title" x="426" y="308">3 analysis: ParallelAgent</text>
+<rect class="box" x="426" y="318" width="172" height="44" rx="8"/>
+<text x="438" y="337" font-size="14">exposure_analyst</text>
+<text class="muted" x="438" y="353">internet-facing, data class</text>
+<rect class="box" x="426" y="368" width="172" height="44" rx="8"/>
+<text x="438" y="387" font-size="14">patch_analyst</text>
+<text class="muted" x="438" y="403">target version, end of life</text>
+
+<path class="seq" d="M204 319 H222" marker-end="url(#s)"/>
+<path class="seq" d="M394 319 H410" marker-end="url(#s)"/>
+<path class="seq" d="M512 420 V434 H220 V444" marker-end="url(#s)"/>
+
+<rect class="loop" x="36" y="446" width="372" height="108" rx="10"/>
+<text class="title" x="48" y="466">4 plan_room: LoopAgent, at most 3 rounds</text>
+<rect class="box" x="48" y="476" width="150" height="46" rx="8"/>
+<text x="60" y="497" font-size="14">planner</text>
+<text class="muted" x="60" y="513">drafts the patch plan</text>
+<rect class="box" x="244" y="476" width="150" height="46" rx="8"/>
+<text x="256" y="497" font-size="14">reviewer</text>
+<text class="muted" x="256" y="513">checks every site</text>
+<path class="lp" d="M198 492 H240" marker-end="url(#l)"/>
+<path class="lp" d="M244 510 H202" marker-end="url(#l)"/>
+<text class="muted" x="48" y="544">exits when each site has a version, owner and rollback</text>
+
+<path class="seq" d="M408 500 H424" marker-end="url(#s)"/>
+<rect class="box" x="426" y="476" width="184" height="62" rx="8"/>
+<text class="title" x="438" y="498">5 report_writer</text>
+<text class="muted" x="438" y="516">tool: write_report</text>
+<text class="muted" x="438" y="531">writes only to reports/</text>
+
+<!-- inputs -->
+<text class="muted" x="36" y="368">inputs: data/advisory.json (public facts)</text>
+<text class="muted" x="36" y="384">and data/fleet.csv (a made-up fleet)</text>
+
+<!-- guardrails -->
+<rect class="guard" x="20" y="584" width="604" height="44" rx="8"/>
+<text x="34" y="603" font-size="13.5">Read-only tools · versions matched in code · one write, to reports/ only</text>
+<text x="34" y="620" font-size="13.5">A person approves every patch · OpenTelemetry spans for each step</text>
+</svg>
